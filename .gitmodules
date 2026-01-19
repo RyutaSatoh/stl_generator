@@ -1,0 +1,3 @@
+[submodule "gemini_proxy"]
+	path = gemini_proxy
+	url = git@github.com:RyutaSatoh/gemini_proxy.git

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Generation History</h1>
+    <a href="{{ url_for('create') }}" class="btn btn-primary">Create New</a>
+</div>
+
+<div class="row">
+    {% for job in jobs %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if job.png_filename %}
+            <img src="{{ url_for('static', filename=job.png_filename) }}" class="card-img-top" alt="Preview" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                <span class="text-muted">{{ job.status }}</span>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">Job #{{ job.id }}</h5>
+                <p class="card-text text-truncate">{{ job.prompt }}</p>
+                <span class="badge bg-{{ 'success' if job.status == 'completed' else 'warning' if job.status == 'processing' else 'danger' if job.status == 'failed' else 'secondary' }}">
+                    {{ job.status }}
+                </span>
+                <p class="text-muted small mt-2">{{ job.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+                <a href="{{ url_for('detail', job_id=job.id) }}" class="btn btn-outline-primary w-100">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

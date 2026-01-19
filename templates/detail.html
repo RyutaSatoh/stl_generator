@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">&larr; Back to List</a>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Left Column: Status & Preview -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Job #{{ job.id }}</h3>
+                <span class="badge bg-{{ 'success' if job.status == 'completed' else 'warning' if job.status == 'processing' else 'danger' if job.status == 'failed' else 'secondary' }} status-{{ job.status }}">
+                    {{ job.status }}
+                </span>
+            </div>
+            <div class="card-body text-center">
+                {% if job.status == 'completed' and job.png_filename %}
+                    <img src="{{ url_for('static', filename=job.png_filename) }}" class="preview-img mb-3">
+                    <div class="d-grid gap-2 d-md-block">
+                        <a href="{{ url_for('static', filename=job.stl_filename) }}" class="btn btn-success" download>Download STL</a>
+                        <a href="{{ url_for('static', filename=job.scad_filename) }}" class="btn btn-outline-dark" download>Download SCAD</a>
+                    </div>
+                {% elif job.status == 'failed' %}
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> {{ job.error_message }}
+                    </div>
+                    <form action="{{ url_for('retry', job_id=job.id) }}" method="POST">
+                        <button type="submit" class="btn btn-warning">Retry</button>
+                    </form>
+                {% else %}
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Generating... This may take a few minutes.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Revise Form -->
+        <div class="card">
+            <div class="card-header">
+                Revise / Iterate
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('revise', job_id=job.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="prompt" class="form-label">Refine Prompt</label>
+                        <textarea class="form-control" name="prompt" rows="4">{{ job.prompt }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Generate Revision (New Job)</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="mt-3 text-end">
+             <form action="{{ url_for('delete', job_id=job.id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                <button type="submit" class="btn btn-danger btn-sm">Delete Job</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Column: Code -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                Generated OpenSCAD Code
+            </div>
+            <div class="card-body">
+                {% if job.scad_code %}
+                <pre><code>{{ job.scad_code }}</code></pre>
+                {% else %}
+                <p class="text-muted">Code not available yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

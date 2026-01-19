@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+instance/
+.gemini/
+output/
+*.log
+*.scad
+*.stl
+*.png
+!OPENSCAD_PROMPT.md
+*~
