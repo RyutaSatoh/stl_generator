@@ -65,18 +65,14 @@ def generate_scad(prompt, work_dir, resume_session=False, system_prompt_path="OP
             lines = proxy.get_screen_content()
             screen_text = "\n".join(lines)
             
-            # Check for final prompt (task completion)
-            is_prompt_visible = "Type your message" in screen_text
-            is_done_message_visible = "Generated Files:" in screen_text and "3." in screen_text
-            
-            if (is_prompt_visible or is_done_message_visible) and (time.time() - proxy._last_screen_update > 2.0):
-                if "```" in screen_text or "User Request:" in screen_text:
-                     log_debug("Final prompt or completion message detected.")
-                     response_text = screen_text
-                     break
+            # Check for completion token
+            if "ALL_TASKS_COMPLETED_SUCCESSFULLY" in screen_text:
+                 log_debug("Completion token detected.")
+                 response_text = screen_text
+                 break
             
             # Check for tool confirmation
-            tool_keywords = ["WriteFile", "render_views", "export_stl"]
+            tool_keywords = ["WriteFile", "replace", "render_views", "export_stl"]
             has_tool = any(k in screen_text for k in tool_keywords)
             
             if has_tool and "Type your message" not in screen_text:

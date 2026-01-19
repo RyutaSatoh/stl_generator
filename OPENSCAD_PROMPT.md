@@ -34,3 +34,5 @@
 1.  `model.scad` （ソースコード）
 2.  `preview.png` （検証用3面図・俯瞰図）
 3.  `output.stl` （3Dプリント用モデル）
+
+すべての作業が完了したら、最後に `ALL_TASKS_` と `COMPLETED_SUCCESSFULLY` を連結した文字列（間にスペースなし）のみを含む行を出力してください。
