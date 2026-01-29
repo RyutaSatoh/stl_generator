@@ -9,3 +9,4 @@ output/
 *.png
 !OPENSCAD_PROMPT.md
 *~
+static/jobs/

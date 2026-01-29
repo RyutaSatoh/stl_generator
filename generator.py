@@ -93,6 +93,12 @@ def generate_scad(prompt, work_dir, resume_session=False, system_prompt_path="OP
     except Exception as e:
         log_debug(f"Exception detected: {str(e)}")
         error_msg = f"Error using GeminiProxy: {str(e)}"
+        # Dump screen content for debugging
+        try:
+            screen_dump = "\n".join(proxy.get_screen_content())
+            log_debug(f"Screen Dump at exception:\n{screen_dump}")
+        except:
+            log_debug("Failed to dump screen content.")
     finally:
         proxy.stop()
         log_debug("Gemini Proxy stopped.")
