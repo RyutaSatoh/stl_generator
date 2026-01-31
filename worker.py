@@ -31,7 +31,7 @@ def process_job(app, job_id, resume=False):
     # Expected file locations in job_dir
     scad_file = os.path.join(job_dir, 'model.scad')
     stl_file = os.path.join(job_dir, 'output.stl')
-    png_file = os.path.join(job_dir, 'preview.png')
+    png_file = os.path.join(job_dir, 'output.png')
 
     error_msg = None
     scad_code = None
@@ -82,7 +82,7 @@ def process_job(app, job_id, resume=False):
             # Paths relative to static/
             job.scad_filename = f'jobs/{job_id}/model.scad'
             job.stl_filename = f'jobs/{job_id}/output.stl'
-            job.png_filename = f'jobs/{job_id}/preview.png'
+            job.png_filename = f'jobs/{job_id}/output.png'
         
         db.session.commit()
         print(f"Job {job_id} finished with status: {job.status}")

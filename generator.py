@@ -25,7 +25,7 @@ def generate_scad(prompt, work_dir, resume_session=False, system_prompt_path="OP
     # If resuming, we might want to keep old files as history? 
     # But the agent overwrites model.scad.
     # Let's clear specific target files to ensure we detect new ones.
-    target_files = ["model.scad", "preview.png", "output.stl"]
+    target_files = ["model.scad", "output.png", "output.stl"]
     for f in target_files:
         p = os.path.join(work_dir, f)
         if os.path.exists(p):
